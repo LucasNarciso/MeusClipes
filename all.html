@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Clipes escolhidos</title>
+    <title>Todos os clipes</title>
     <link rel="stylesheet" href="CSS/style.css">
     <script src="JS/script.js"></script>
 
@@ -12,7 +12,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 </head>
-<body onload="iniciaPaginaEscolhidos()">
+<body onload="iniciaPaginaTodos()">
     <div class="navBar">
         <div style="display: flex; align-items: center; gap: 10px; margin: 0px 20px;">
             <svg xmlns="http://www.w3.org/2000/svg" width="33" height="34" viewBox="0 0 33 34" fill="none">
@@ -21,24 +21,13 @@
             <p id="tituloNavBar">Meus clipes</p>
         </div>
         <div id="botoesNavBar">
-            <a class="botaoDesativado">Escolhidos</a>
+            <a class="botaoAtivado" href="/index.html">Escolhidos</a>
             <a class="botaoAtivado" href="/random.html">Aleatorio</a>
-            <a class="botaoAtivado" href="/all.html">Todos</a>
+            <a class="botaoDesativado">Todos</a>
         </div>
     </div>
+    <div id="conteudoPaginaTodos">
 
-    <div id="conteudoPaginaEscolhidos">
-        <p id="tituloPaginaEscolhidos">Clipe do dia</p>
-        <div id="divConteudoDoDia">
-            <div class="divSeparacao">
-                <div class="divSeparacaoTitulo"><b>CLIPE: </b> <span style="margin-left: 10px;" id="nomeDoClipe"> asda sd asdas ads asdas as dasd as d asdasd as asdas dasd a asd as das dasdaas das das das d</span> </div>
-                <div class="divSeparacaoMVP"><b>MVP: </b><span style="margin-left: 10px;" id="MVPCLIPE"> MVP DO CLIPE</span> </div>
-                <div class="divSeparacaoDados"><b>DADOS: </b></div>
-            </div>
-            <div id="ClipeDoDia" class="divSeparacao">
-                <iframe height="100%" src="https://drive.google.com/file/d/1ebuvMaAoItUS-bUabvVmpOZYc71vLp1l/preview" frameborder="0"></iframe>
-            </div>
-        </div>
     </div>
 </body>
 </html>
