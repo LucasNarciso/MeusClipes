@@ -31,12 +31,14 @@
         <p id="tituloPaginaEscolhidos">Clipe do dia</p>
         <div id="divConteudoDoDia">
             <div class="divSeparacao">
-                <div class="divSeparacaoTitulo"><b>CLIPE: </b> <span style="margin-left: 10px;" id="nomeDoClipe"> asda sd asdas ads asdas as dasd as d asdasd as asdas dasd a asd as das dasdaas das das das d</span> </div>
-                <div class="divSeparacaoMVP"><b>MVP: </b><span style="margin-left: 10px;" id="MVPCLIPE"> MVP DO CLIPE</span> </div>
-                <div class="divSeparacaoDados"><b>DADOS: </b></div>
+                <div class="divSeparacaoTitulo"><b>CLIPE: </b> <span style="margin-left: 10px;" id="nomeDoClipe"> </span> </div>
+                <div class="divSeparacaoMVP"><b>MVP: </b> <span style="margin-left: 10px;" id="MVPClipe"> </span> </div>
+                <div class="divSeparacaoDados"><b>DADOS: </b> <div style="width: 100%;" id="dadosClipe"> </div> </div>
             </div>
             <div id="ClipeDoDia" class="divSeparacao">
-                <iframe height="100%" src="https://drive.google.com/file/d/1ebuvMaAoItUS-bUabvVmpOZYc71vLp1l/preview" frameborder="0"></iframe>
+                <div id="loadingClipeDoDia" class="loaderDiv" style="position: absolute;">
+                    <span class="loader"></span>
+                </div>
             </div>
         </div>
     </div>
