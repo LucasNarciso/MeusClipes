@@ -61,7 +61,6 @@ function iniciaPaginaEscolhidos(){
     //adicionaLoading('box', 'conteudoPaginaEscolhidos', 'loadingClipes')
     if(!validaJSONClipes()){
         buscarClipes(salvarJSONClipes)
-        escolheClipes();
     }else{
         escolheClipes()
     }
@@ -161,14 +160,19 @@ function salvarJSONClipes(json){
     }
     localStorage.setItem('MeusClipes-All',JSON.stringify(json))
     console.log("Novos Clipes Salvos!")
+    escolheClipes();
 }
 
 //Verifica se a data do JSON salvo no local storage é atual 
 function validaJSONClipes(){
     let json = JSON.parse(localStorage.getItem("MeusClipes-All"))
-    let dataAtual = new Date().toLocaleDateString('pt-br', { year:"numeric", month:"numeric", day:"numeric"});
-    buscarClipes(verificaNovoConteudo);
-    return json.data == dataAtual ? true : false;
+    if(json){
+        let dataAtual = new Date().toLocaleDateString('pt-br', { year:"numeric", month:"numeric", day:"numeric"});
+        buscarClipes(verificaNovoConteudo);
+        return json.data == dataAtual ? true : false;
+    }else{
+        return false;
+    }
 }
 
 //Remove o loading que possui o ID do parâmetro
@@ -191,14 +195,22 @@ async function buscarClipes(func){
 
 //Verifica se há conteudos novos a serem pesquisados
 function verificaNovoConteudo(json){
-    let jsonOld = JSON.parse(localStorage.getItem("MeusClipes-All")).dados
-    json = JSON.parse(json).data
+    let jsonOld = JSON.stringify(JSON.parse(localStorage.getItem("MeusClipes-All")).dados)
+    json = JSON.stringify(JSON.parse(json).data)
     console.log(json)
 
-    if(jsonOld.length < json.length){ adicionaBtnAtt() } else { console.log("Não Há Conteudos Novos!") }
+    if(jsonOld.length !== json.length){ adicionaBtnAtt() } else { console.log("Não Há Conteudos Novos!") }
 }
 
 //Adiciona o botão de atualizar o conteudo da página
 function adicionaBtnAtt(){
-    document.getElementById('botoesNavBar').insertAdjacentHTML('afterBegin', `<button id="btnAttConteudo">ATUALIZAR <svg id="AttBtnIcon" width="11" height="16" viewBox="0 0 11 16" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M5.5 2.5004V4.07172C4.72204 4.07033 3.96118 4.29996 3.31388 4.73151C2.66659 5.16306 2.162 5.77709 1.8641 6.49576C1.5662 7.21443 1.4884 8.00537 1.64055 8.76831C1.79271 9.53124 2.16797 10.2318 2.71877 10.7812L1.611 11.889C0.841784 11.1199 0.317934 10.1399 0.105697 9.07303C-0.106539 8.00616 0.00237244 6.90032 0.418657 5.89535C0.834941 4.89038 1.5399 4.03143 2.44438 3.42713C3.34886 2.82283 4.41222 2.50033 5.5 2.5004ZM9.389 4.111C10.1582 4.88014 10.6821 5.86011 10.8943 6.92698C11.1065 7.99385 10.9976 9.0997 10.5813 10.1047C10.1651 11.1096 9.4601 11.9686 8.55562 12.5729C7.65114 13.1772 6.58778 13.4997 5.5 13.4996V11.9283C6.27796 11.9297 7.03882 11.7 7.68612 11.2685C8.33341 10.8369 8.838 10.2229 9.1359 9.50425C9.4338 8.78558 9.5116 7.99464 9.35945 7.23171C9.20729 6.46877 8.83203 5.76819 8.28123 5.21878L9.389 4.111ZM5.5 15.8566L2.35737 12.7139L5.5 9.57132V15.8566ZM5.5 6.42869V0.143433L8.64263 3.28606L5.5 6.42869Z" fill="#272932"/> </svg></button`)
+    document.getElementById('botoesNavBar').insertAdjacentHTML('afterBegin', `<button id="btnAttConteudo" onclick="atualizaConteudo()">ATUALIZAR <svg id="AttBtnIcon" width="11" height="16" viewBox="0 0 11 16" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M5.5 2.5004V4.07172C4.72204 4.07033 3.96118 4.29996 3.31388 4.73151C2.66659 5.16306 2.162 5.77709 1.8641 6.49576C1.5662 7.21443 1.4884 8.00537 1.64055 8.76831C1.79271 9.53124 2.16797 10.2318 2.71877 10.7812L1.611 11.889C0.841784 11.1199 0.317934 10.1399 0.105697 9.07303C-0.106539 8.00616 0.00237244 6.90032 0.418657 5.89535C0.834941 4.89038 1.5399 4.03143 2.44438 3.42713C3.34886 2.82283 4.41222 2.50033 5.5 2.5004ZM9.389 4.111C10.1582 4.88014 10.6821 5.86011 10.8943 6.92698C11.1065 7.99385 10.9976 9.0997 10.5813 10.1047C10.1651 11.1096 9.4601 11.9686 8.55562 12.5729C7.65114 13.1772 6.58778 13.4997 5.5 13.4996V11.9283C6.27796 11.9297 7.03882 11.7 7.68612 11.2685C8.33341 10.8369 8.838 10.2229 9.1359 9.50425C9.4338 8.78558 9.5116 7.99464 9.35945 7.23171C9.20729 6.46877 8.83203 5.76819 8.28123 5.21878L9.389 4.111ZM5.5 15.8566L2.35737 12.7139L5.5 9.57132V15.8566ZM5.5 6.42869V0.143433L8.64263 3.28606L5.5 6.42869Z" fill="#272932"/> </svg></button`)
+}
+
+function atualizaConteudo(){
+    let json = JSON.parse(localStorage.getItem("MeusClipes-All"))
+    json.data = ""
+    localStorage.clear('MeusClipes-All')
+    //localStorage.setItem('MeusClipes-All',JSON.stringify(json))
+    window.location.reload();
 }

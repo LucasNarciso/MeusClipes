@@ -204,7 +204,6 @@ body{
 }
 
 #btnAttConteudo{
-    padding: 0px 10px;
     border: none;
     background-color: #D8A47F;
     color: #272932;
@@ -212,7 +211,17 @@ body{
     align-items: center;
     justify-content: center;
     gap: 5px;
+    animation: apearBtnAtt 0.4s ease-in-out forwards;
     transition: 0.1s ease-in-out;
+}
+
+@keyframes apearBtnAtt {
+    0%{
+        width: 0px;
+    }
+    100%{
+        width: 100px;
+    }
 }
 
 #btnAttConteudo:hover{
