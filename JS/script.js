@@ -116,8 +116,9 @@ function montaVideosPaginaTodos(obj){
     obj.dados.forEach((clipe, index) => {
         divVideos.insertAdjacentHTML('beforeEnd',`
             <div class="card" style="background-color: #0F7173; position: relative;">
+                <div class="nomeClipeCard"><p>${clipe.name.replace('.mp4','')}</p></div>
                 <div id="loadingClipe${index}" class="loaderDiv" style="position: absolute;"><span class="loader"></span></div>
-                <iframe onload="loadIframes(this); removeLoading('loadingClipe${index}')" src="https://drive.google.com/file/d/${clipe.id}/preview" allowfullscreen type='video/mp4'></iframe>
+                <iframe onload="loadIframes(this); removeLoading('loadingClipe${index}'); this.click()" src="https://drive.google.com/file/d/${clipe.id}/preview" allowfullscreen type='video/mp4'></iframe>
             </div>
         `)
     });

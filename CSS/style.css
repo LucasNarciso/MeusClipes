@@ -102,6 +102,8 @@ body{
     max-width: 350px;
     height: fit-content;
     display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .card iframe{
@@ -109,6 +111,17 @@ body{
     opacity: 0;
     width: 100%;
     border: none;
+}
+
+.nomeClipeCard{
+    width: 100%;
+    height: 40px;
+    background-color: rgba(15, 113, 115, .6);
+    color: #fff;
+}
+.nomeClipeCard p{
+    margin: 0px 5px;
+    width: 300px;
 }
 
 /*********** ESTILIZAÇÃO - PAGINA ESCOLHIDOS ***********/
@@ -129,7 +142,7 @@ body{
     margin: auto;
 }
 
-#tituloPaginaEscolhidos{
+.tituloPrincipalPagina{
     color: #0F7173;
     font-size: 32px;
     font-style: normal;
@@ -244,4 +257,22 @@ body{
     100%{
         transform: rotate(360deg);
     }
+}
+
+/*********** ESTILIZAÇÃO - PAGINA ALEATÓRIO ***********/
+
+#conteudoPaginaAleatorio {
+    display: flex;
+    padding: 78px 10px;
+    height: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: flex-start;
+    justify-content: start;
+    gap: 1vw;
+    align-self: stretch;
+    background-color: #E7ECEF;
+    max-width: 2000px;
+    margin: auto;
 }
