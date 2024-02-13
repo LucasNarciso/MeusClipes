@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todos os clipes</title>
+    <title>Clipes escolhidos</title>
     <link rel="stylesheet" href="CSS/style.css">
     <script src="JS/script.js"></script>
     <link rel="icon" type="image/x-icon" href="Assets/Icone_Site.png">
@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 </head>
-<body onload="iniciaPaginaTodos()">
+<body onload="iniciaPaginaEscolhidos()">
     <div class="navBar">
         <div style="display: flex; align-items: center; gap: 10px; margin: 0px 20px;">
             <svg xmlns="http://www.w3.org/2000/svg" width="33" height="34" viewBox="0 0 33 34" fill="none">
@@ -22,13 +22,26 @@
             <p id="tituloNavBar">Meus clipes</p>
         </div>
         <div id="botoesNavBar">
-            <a class="botaoAtivado" href="index">Escolhidos</a>
-            <a class="botaoAtivado" href="random">Aleatorio</a>
-            <a class="botaoDesativado">Todos</a>
+            <a class="botaoDesativado">Escolhidos</a>
+            <a class="botaoAtivado" href="aleatorio">Aleatorio</a>
+            <a class="botaoAtivado" href="pesquisa">Pesquisa</a>
         </div>
     </div>
-    <div id="conteudoPaginaTodos">
 
+    <div id="conteudoPaginaEscolhidos">
+        <p class="tituloPrincipalPagina">Clipe do dia</p>
+        <div id="divConteudoDoDia">
+            <div class="divSeparacao">
+                <div class="divSeparacaoTitulo"><b>CLIPE: </b> <span style="margin-left: 10px;" id="nomeDoClipe"> </span> </div>
+                <div class="divSeparacaoMVP"><b>MVP: </b> <span style="margin-left: 10px;" id="MVPClipe"> </span> </div>
+                <div class="divSeparacaoDados"><b>DADOS: </b> <div style="width: 100%;" id="dadosClipe"> </div> </div>
+            </div>
+            <div id="ClipeDoDia" class="divSeparacao">
+                <div id="loadingClipeDoDia" class="loaderDiv" style="position: absolute;">
+                    <span class="loader"></span>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
