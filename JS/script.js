@@ -71,7 +71,7 @@ function escolheClipes(){
     let clipeDoDia = json.dados.filter(clipe => JSON.parse(clipe.desc).data.split(' ')[0] == (new Date().toLocaleDateString('pt-br', { year:"numeric", month:"numeric", day:"numeric"})) )[0];
 
     if(clipeDoDia){
-        document.getElementById('ClipeDoDia').insertAdjacentHTML('beforeEnd',`<iframe onload="loadIframes(this); removeLoading('loadingClipeDoDia')" src="https://drive.google.com/file/d/${clipeDoDia.id}/preview" frameborder="0" allowFullScreen></iframe>`)
+        document.getElementById('ClipeDoDia').insertAdjacentHTML('beforeEnd',`<iframe onload="loadIframes(this); removeLoading('loadingClipeDoDia')" src="https://drive.google.com/file/d/${clipeDoDia.id}/preview" frameborder="0" allowFullScreen allow="autoplay"></iframe>`)
         document.getElementById('nomeDoClipe').innerHTML = clipeDoDia.name
         document.getElementById('MVPClipe').innerHTML = JSON.parse(clipeDoDia.desc).mvp;
 
@@ -118,13 +118,36 @@ function montaVideosPaginaTodos(obj){
             <div class="card" style="background-color: #0F7173; position: relative;">
                 <div class="nomeClipeCard"><p>${clipe.name.replace('.mp4','')}</p></div>
                 <div id="loadingClipe${index}" class="loaderDiv" style="position: absolute;"><span class="loader"></span></div>
-                <iframe onload="loadIframes(this); removeLoading('loadingClipe${index}'); this.click()" src="https://drive.google.com/file/d/${clipe.id}/preview" allowfullscreen type='video/mp4'></iframe>
+                <iframe onload="loadIframes(this); removeLoading('loadingClipe${index}'); this.click()" src="https://drive.google.com/file/d/${clipe.id}/preview" allowfullscreen type='video/mp4' allow="autoplay"></iframe>
             </div>
         `)
     });
 
     removeLoading('loadingClipes');
 }
+
+/////////////////////////////////// FUNÇÕES - PAGINA ALEATORIO //////////
+
+
+function carregaPaginaAleatorio(){
+    buscaClipeAleatorio();
+}
+
+function buscaClipeAleatorio(){
+    let jsonDados = JSON.parse(localStorage.getItem("MeusClipes-All"));
+    let clipeAleatorio = jsonDados.dados[Math.floor(Math.random()*jsonDados.dados.length)]
+    document.getElementById('DivClipeAleatorio').innerHTML = ""
+    document.getElementById('DivClipeAleatorio').insertAdjacentHTML('afterBegin',`
+        <div id="InfoClipeAleatorio">
+            <p>${clipeAleatorio.name.replace('.mp4','')}</p>
+            <p>${JSON.parse(clipeAleatorio.desc).data}</p>
+        </div>
+        <div id="ClipeAleatorioLoading" class="loaderDiv" style="position: absolute;"><span class="loader"></span></div>
+        <iframe autoplay=1 onload="loadIframes(this); removeLoading('ClipeAleatorioLoading'); this.click()" id="ClipeAleatorio" src="https://drive.google.com/file/d/${clipeAleatorio.id}/preview" allow="autoplay" frameborder="0" allowfullscreen="" sandbox="allow-forms allow-same-origin allow-scripts"></iframe>
+    `)
+}
+
+
 
 /////////////////////////////////// FUNÇÕES - GLOBAIS //////////
 

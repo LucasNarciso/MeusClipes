@@ -9,6 +9,7 @@
 
 body{
     background-color: #E7ECEF;
+    height: 100vh;
 }
 
 /* NAVBAR */
@@ -20,6 +21,7 @@ body{
     align-items: center;
     position: fixed;
     background: #272932;
+    z-index: 9;
     
 }
 #tituloNavBar{
@@ -84,7 +86,7 @@ body{
 
 #conteudoPaginaTodos {
     display: flex;
-    padding: 78px 10px;
+    padding: 78px 10px 0px 10px;
     height: 76vh;
     flex-direction: row;
     flex-wrap: wrap;
@@ -128,7 +130,7 @@ body{
 
 #conteudoPaginaEscolhidos {
     display: flex;
-    padding: 78px 10px;
+    padding: 78px 10px 0px 10px;
     height: auto;
     flex-direction: row;
     flex-wrap: wrap;
@@ -263,16 +265,55 @@ body{
 
 #conteudoPaginaAleatorio {
     display: flex;
-    padding: 78px 10px;
-    height: auto;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    align-items: flex-start;
+    padding: 78px 10px 0px 10px;
+    flex-direction: column;
+    align-items: center;
     justify-content: start;
-    gap: 1vw;
-    align-self: stretch;
     background-color: #E7ECEF;
     max-width: 2000px;
     margin: auto;
+    gap: 20px;
+    height: auto;
+}
+
+#DivClipeAleatorio{
+    background-color: #0F7173;
+    position: relative;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+#DivClipeAleatorio iframe{
+    width: 700px;
+    height: 395px;
+}
+
+#ClipeAleatorio{
+    transition: 0.3s ease-in-out;
+    opacity: 0;
+    height: 100%;
+    width: 100%;
+}
+
+#BotaoAleatorio{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0F7173;
+    border: none;
+    padding: 10px 10px;
+    border-radius: 3px;
+    transition: 0.2s ease-in-out;
+}
+
+#BotaoAleatorio:hover{
+    cursor: pointer;
+    transform: scale(1.1);
+}
+
+#InfoClipeAleatorio{
+    display: flex;
+    justify-content: space-between;
+    color: #fff;
+    padding: 5px;
 }
