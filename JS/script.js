@@ -53,6 +53,8 @@ let JSONBASE = {
     ]
 }
 
+var JSONDATA;
+
 
 /////////////////////////////////// FUNÇÕES - PAGINA ESCOLHIDOS //////////
 
@@ -98,24 +100,22 @@ function escolheClipes(){
 
 //Chama todas as funções iniciais da Página
 function iniciaPaginaTodos(){
-    adicionaLoading('box', 'conteudoPaginaTodos', 'loadingClipes')
+    //adicionaLoading('box', 'resultadoPesquisa', 'loadingClipes')
     if(!validaJSONClipes()){
         buscarClipes(salvarJSONClipes)
-        console.log(JSON.parse(localStorage.getItem("MeusClipes-All")));
-        montaVideosPaginaTodos(JSON.parse(localStorage.getItem("MeusClipes-All")));
-    }else{
-        console.log(JSON.parse(localStorage.getItem("MeusClipes-All")));
-        montaVideosPaginaTodos(JSON.parse(localStorage.getItem("MeusClipes-All")))
     }
+
+    JSONDATA = JSON.parse(localStorage.getItem("MeusClipes-All"));
+    //montaVideosPaginaTodos(JSONDATA);
 }
 
 //Adiciona todos os clipes na pagina
 function montaVideosPaginaTodos(obj){
-    let divVideos = document.getElementById('conteudoPaginaTodos')
+    let divVideos = document.getElementById('resultadoPesquisa')
 
     obj.dados.forEach((clipe, index) => {
         divVideos.insertAdjacentHTML('beforeEnd',`
-            <div class="card" style="background-color: #0F7173; position: relative;">
+            <div class="card" id="cardClipe${index}" style="display:none" data-clipeData="${JSON.parse(clipe.desc).data}" data-clipeNome="${clipe.name.replace('.mp4','')}" data-clipeJogo="${clipe.folder}">
                 <div class="nomeClipeCard"><p>${clipe.name.replace('.mp4','')}</p></div>
                 <div id="loadingClipe${index}" class="loaderDiv" style="position: absolute;"><span class="loader"></span></div>
                 <iframe onload="loadIframes(this); removeLoading('loadingClipe${index}'); this.click()" src="https://drive.google.com/file/d/${clipe.id}/preview" allowfullscreen type='video/mp4' allow="autoplay"></iframe>
@@ -124,6 +124,53 @@ function montaVideosPaginaTodos(obj){
     });
 
     removeLoading('loadingClipes');
+}
+
+function montaVideosPaginaTodosV2(obj){
+    let divVideos = document.getElementById('resultadoPesquisa');
+    divVideos.innerHTML = "";
+
+    if(obj != false){
+        obj.dados.forEach((clipe, index) => {
+            divVideos.insertAdjacentHTML('beforeEnd',`
+                <div class="card" id="cardClipe${index}" data-clipeData="${JSON.parse(clipe.desc).data}" data-clipeNome="${clipe.name.replace('.mp4','')}" data-clipeJogo="${clipe.folder}">
+                    <div class="nomeClipeCard"><p>${clipe.name.replace('.mp4','')}</p></div>
+                    <div id="loadingClipe${index}" class="loaderDiv" style="position: absolute;"><span class="loader"></span></div>
+                    <iframe onload="loadIframes(this); removeLoading('loadingClipe${index}'); this.click()" src="https://drive.google.com/file/d/${clipe.id}/preview" allowfullscreen type='video/mp4' allow="autoplay"></iframe>
+                </div>
+            `)
+        });
+    }else{
+        divVideos.insertAdjacentHTML('beforeEnd','<p> Nenhum vídeo foi encontrado. </p>')
+    }
+}
+
+function pesquisaClipes(campo){
+    let clipes = document.querySelectorAll('.card')
+    setTimeout(() => {
+        clipes.forEach((clipe)=>{
+            if(clipe.getAttribute('data-clipenome').search(campo.value) != -1){
+                clipe.style.display = "flex";
+            }else{
+                clipe.style.display = "none";
+            }
+        })
+    }, 200);
+}
+
+function pesquisaClipesv2(campo){
+    let clipesFiltrados = []
+    JSONDATA.dados.forEach((clipe)=>{
+        if(clipe.name.search(campo.value) != -1){
+            clipesFiltrados.push(clipe)
+        }
+    })
+
+    if(clipesFiltrados.length > 0){
+        montaVideosPaginaTodosV2({dados: clipesFiltrados});
+    }else{
+        montaVideosPaginaTodosV2(false);
+    }
 }
 
 /////////////////////////////////// FUNÇÕES - PAGINA ALEATORIO //////////
@@ -221,7 +268,6 @@ async function buscarClipes(func){
 function verificaNovoConteudo(json){
     let jsonOld = JSON.stringify(JSON.parse(localStorage.getItem("MeusClipes-All")).dados)
     json = JSON.stringify(JSON.parse(json).data)
-    console.log(json)
 
     if(jsonOld.length !== json.length){ adicionaBtnAtt() } else { console.log("Não Há Conteudos Novos!") }
 }
