@@ -80,7 +80,7 @@ function escolheClipes(){
         document.getElementById('dadosClipe').insertAdjacentHTML('beforeEnd',`
             <p style="padding-left: 10px"> Jogo: ${clipeDoDia.folder} </p></br>
             <p style="padding-left: 10px"> Data: ${JSON.parse(clipeDoDia.desc).data} </p></br>
-            <p style="padding-left: 10px"> Tags: ${JSON.parse(clipeDoDia.desc).tags.join(' | ')} </p>
+            <p style="padding-left: 10px"> Tags: ${JSON.parse(clipeDoDia.desc).tags.map( tag=>{ console.log(tag); return `<span class="tagsClipe">${tag}</span>` } ).join(' ')} </p>
         `)
     }else{
         document.getElementById('nomeDoClipe').innerHTML = "...";
@@ -132,11 +132,17 @@ function montaVideosPaginaTodosV2(obj){
 
     if(obj != false){
         obj.dados.forEach((clipe, index) => {
+            // divVideos.insertAdjacentHTML('beforeEnd',`
+            //     <div class="card" id="cardClipe${index}" data-clipeData="${JSON.parse(clipe.desc).data}" data-clipeNome="${clipe.name.replace('.mp4','')}" data-clipeJogo="${clipe.folder}">
+            //         <div class="nomeClipeCard"><p>${clipe.name.replace('.mp4','')}</p></div>
+            //         <div id="loadingClipe${index}" class="loaderDiv" style="position: absolute;"><span class="loader"></span></div>
+            //         <iframe onload="loadIframes(this); removeLoading('loadingClipe${index}'); this.click()" src="https://drive.google.com/file/d/${clipe.id}/preview" allowfullscreen type='video/mp4' allow="autoplay"></iframe>
+            //     </div>
+            // `)
             divVideos.insertAdjacentHTML('beforeEnd',`
                 <div class="card" id="cardClipe${index}" data-clipeData="${JSON.parse(clipe.desc).data}" data-clipeNome="${clipe.name.replace('.mp4','')}" data-clipeJogo="${clipe.folder}">
                     <div class="nomeClipeCard"><p>${clipe.name.replace('.mp4','')}</p></div>
-                    <div id="loadingClipe${index}" class="loaderDiv" style="position: absolute;"><span class="loader"></span></div>
-                    <iframe onload="loadIframes(this); removeLoading('loadingClipe${index}'); this.click()" src="https://drive.google.com/file/d/${clipe.id}/preview" allowfullscreen type='video/mp4' allow="autoplay"></iframe>
+                    <img src="https://drive.google.com/uc?id=${JSON.parse(clipe.desc).thumb}">
                 </div>
             `)
         });
