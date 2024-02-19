@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 </head>
-<body onload="iniciaPaginaTodos()">
+<body onload="iniciaPaginaPesquisa()">
     <div class="navBar">
         <div style="display: flex; align-items: center; gap: 10px; margin: 0px 20px;">
             <svg xmlns="http://www.w3.org/2000/svg" width="33" height="34" viewBox="0 0 33 34" fill="none">
@@ -30,11 +30,17 @@
     <div>asdas</div>
     <div id="conteudoPaginaTodos">
         <div id="divPesquisa">
-            <input id="CampoPesquisa" type="text" onkeyup="pesquisaClipesv2(this)">
+            <input id="CampoPesquisa" type="text" onkeyup="pesquisaClipes(this)">
             <!-- <input id="BotaoPesquisa" type="submit" value="Pesquisar"> -->
+
+            <div class="custom-select">
+                <div class="select-styled" onclick="showOptions()">Filtro</div>
+                <ul class="select-options" id="FiltroOpcoes" style="display: none;"></ul>
+            </div>
+
         </div>
         <div id="resultadoPesquisa">
-
+            <p style="display: none;" id="textoSemVideo"> Nenhum vídeo foi encontrado. </p>
         </div>
     </div>
 </body>

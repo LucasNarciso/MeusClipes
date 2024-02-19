@@ -53,10 +53,7 @@ let JSONBASE = {
     ]
 }
 
-var JSONDATA;
-
-
-/////////////////////////////////// FUNÇÕES - PAGINA ESCOLHIDOS //////////
+/////////////////////////////////// FUNÇÕES [INÍCIO] - PAGINA ESCOLHIDOS //////////
 
 //Chama todas as funções iniciais da Página
 function iniciaPaginaEscolhidos(){
@@ -68,19 +65,20 @@ function iniciaPaginaEscolhidos(){
     }
 }
 
+//Escolhe os clipes da página
 function escolheClipes(){
     let json = JSON.parse(localStorage.getItem("MeusClipes-All"));
     let clipeDoDia = json.dados.filter(clipe => JSON.parse(clipe.desc).data.split(' ')[0] == (new Date().toLocaleDateString('pt-br', { year:"numeric", month:"numeric", day:"numeric"})) )[0];
 
     if(clipeDoDia){
-        document.getElementById('ClipeDoDia').insertAdjacentHTML('beforeEnd',`<iframe onload="loadIframes(this); removeLoading('loadingClipeDoDia')" src="https://drive.google.com/file/d/${clipeDoDia.id}/preview" frameborder="0" allowFullScreen allow="autoplay"></iframe>`)
+        document.getElementById('ClipeDoDia').insertAdjacentHTML('beforeEnd',`<iframe onload="tornarVisivel(this); removeLoading('loadingClipeDoDia')" src="https://drive.google.com/file/d/${clipeDoDia.id}/preview" frameborder="0" allowFullScreen allow="autoplay"></iframe>`)
         document.getElementById('nomeDoClipe').innerHTML = clipeDoDia.name
         document.getElementById('MVPClipe').innerHTML = JSON.parse(clipeDoDia.desc).mvp;
 
         document.getElementById('dadosClipe').insertAdjacentHTML('beforeEnd',`
             <p style="padding-left: 10px"> Jogo: ${clipeDoDia.folder} </p></br>
             <p style="padding-left: 10px"> Data: ${JSON.parse(clipeDoDia.desc).data} </p></br>
-            <p style="padding-left: 10px"> Tags: ${JSON.parse(clipeDoDia.desc).tags.map( tag=>{ console.log(tag); return `<span class="tagsClipe">${tag}</span>` } ).join(' ')} </p>
+            <p style="padding-left: 10px"> Tags: ${JSON.parse(clipeDoDia.desc).tags.map( tag=>{ return `<span class="tagsClipe">${tag}</span>` } ).join(' ')} </p>
         `)
     }else{
         document.getElementById('nomeDoClipe').innerHTML = "...";
@@ -94,98 +92,134 @@ function escolheClipes(){
 
     }
 }
+/////////////////////////////////// FUNÇÕES [FIM] - PAGINA ESCOLHIDOS //////////
 
 
-/////////////////////////////////// FUNÇÕES - PAGINA TODOS //////////
+/////////////////////////////////// FUNÇÕES [INICIO] - PAGINA PESQUISA //////////
 
 //Chama todas as funções iniciais da Página
-function iniciaPaginaTodos(){
-    //adicionaLoading('box', 'resultadoPesquisa', 'loadingClipes')
+async function iniciaPaginaPesquisa(){
+    adicionaLoading('box', 'resultadoPesquisa', 'loadingClipes')
     if(!validaJSONClipes()){
-        buscarClipes(salvarJSONClipes)
+        await buscarClipes(salvarJSONClipes)
     }
 
-    JSONDATA = JSON.parse(localStorage.getItem("MeusClipes-All"));
-    //montaVideosPaginaTodos(JSONDATA);
+    let jsonData = JSON.parse(localStorage.getItem("MeusClipes-All"));
+    montaVideosPaginaPesquisa(jsonData);
 }
 
 //Adiciona todos os clipes na pagina
-function montaVideosPaginaTodos(obj){
+function montaVideosPaginaPesquisa(obj){
     let divVideos = document.getElementById('resultadoPesquisa')
+    let jogos = Array.from(new Set(obj.dados.map(clipe => clipe.folder)))
 
     obj.dados.forEach((clipe, index) => {
         divVideos.insertAdjacentHTML('beforeEnd',`
-            <div class="card" id="cardClipe${index}" style="display:none" data-clipeData="${JSON.parse(clipe.desc).data}" data-clipeNome="${clipe.name.replace('.mp4','')}" data-clipeJogo="${clipe.folder}">
+            <div class="card" id="cardClipe${index}" onclick="abrirPopUp(this)" data-clipeData="${JSON.parse(clipe.desc).data}" data-clipeNome="${clipe.name.replace('.mp4','')}" data-clipeJogo="${clipe.folder}" data-clipeId="${clipe.id}">
                 <div class="nomeClipeCard"><p>${clipe.name.replace('.mp4','')}</p></div>
                 <div id="loadingClipe${index}" class="loaderDiv" style="position: absolute;"><span class="loader"></span></div>
-                <iframe onload="loadIframes(this); removeLoading('loadingClipe${index}'); this.click()" src="https://drive.google.com/file/d/${clipe.id}/preview" allowfullscreen type='video/mp4' allow="autoplay"></iframe>
+                <div style="display: flex; width:310px; height: 174px">
+                    <img style="transition: 0.2s ease-in-out; opacity: 0; width:100%;" src="https://drive.google.com/thumbnail?id=${JSON.parse(clipe.desc).thumb}">
+                </div>
             </div>
         `)
+
+        var minhaImagem = document.getElementById(`cardClipe${index}`).querySelector('img');
+
+        // Adiciona o manipulador de eventos onload
+        minhaImagem.onload = function() {
+            tornarVisivel(minhaImagem)
+            removeLoading(`loadingClipe${index}`)
+            // Faça outras operações após o carregamento da imagem, se necessário
+        };
     });
 
     removeLoading('loadingClipes');
+
+    document.getElementById('FiltroOpcoes').innerHTML = jogos.map(jogo=>`<li onclick="selectOption(this)">${jogo}</li>`).join('')
+    document.getElementById('FiltroOpcoes').insertAdjacentHTML('afterBegin','<li onclick="selectOption(this)">Filtro</li>')
 }
 
-function montaVideosPaginaTodosV2(obj){
-    let divVideos = document.getElementById('resultadoPesquisa');
-    divVideos.innerHTML = "";
+//Pesquisa pelos clipes usando os parâmetros do campo
+async function pesquisaClipes(campo){
+    let clipes = document.querySelectorAll('.card');
+    let filtro = document.querySelector("#divPesquisa > div > div").innerText;
 
-    if(obj != false){
-        obj.dados.forEach((clipe, index) => {
-            // divVideos.insertAdjacentHTML('beforeEnd',`
-            //     <div class="card" id="cardClipe${index}" data-clipeData="${JSON.parse(clipe.desc).data}" data-clipeNome="${clipe.name.replace('.mp4','')}" data-clipeJogo="${clipe.folder}">
-            //         <div class="nomeClipeCard"><p>${clipe.name.replace('.mp4','')}</p></div>
-            //         <div id="loadingClipe${index}" class="loaderDiv" style="position: absolute;"><span class="loader"></span></div>
-            //         <iframe onload="loadIframes(this); removeLoading('loadingClipe${index}'); this.click()" src="https://drive.google.com/file/d/${clipe.id}/preview" allowfullscreen type='video/mp4' allow="autoplay"></iframe>
-            //     </div>
-            // `)
-            divVideos.insertAdjacentHTML('beforeEnd',`
-                <div class="card" id="cardClipe${index}" data-clipeData="${JSON.parse(clipe.desc).data}" data-clipeNome="${clipe.name.replace('.mp4','')}" data-clipeJogo="${clipe.folder}">
-                    <div class="nomeClipeCard"><p>${clipe.name.replace('.mp4','')}</p></div>
-                    <img src="https://drive.google.com/uc?id=${JSON.parse(clipe.desc).thumb}">
-                </div>
-            `)
-        });
-    }else{
-        divVideos.insertAdjacentHTML('beforeEnd','<p> Nenhum vídeo foi encontrado. </p>')
+    if(filtro == 'Filtro'){
+        filtro = "";
     }
-}
 
-function pesquisaClipes(campo){
-    let clipes = document.querySelectorAll('.card')
     setTimeout(() => {
-        clipes.forEach((clipe)=>{
-            if(clipe.getAttribute('data-clipenome').search(campo.value) != -1){
+        clipes.forEach((clipe) => {
+            if (clipe.getAttribute('data-clipenome').toUpperCase().search(campo.value.toUpperCase()) != -1 && clipe.getAttribute('data-clipejogo').search(filtro) != -1) {
                 clipe.style.display = "flex";
-            }else{
+            } else {
                 clipe.style.display = "none";
             }
-        })
-    }, 200);
-}
-
-function pesquisaClipesv2(campo){
-    let clipesFiltrados = []
-    JSONDATA.dados.forEach((clipe)=>{
-        if(clipe.name.search(campo.value) != -1){
-            clipesFiltrados.push(clipe)
+        });
+        
+        if (Array.from(document.querySelectorAll('[class="card"]')).filter(card => card.checkVisibility()).length == 0) {
+            document.getElementById('textoSemVideo').style.display = "flex";
+        }else{
+            document.getElementById('textoSemVideo').style.display = "none";
         }
-    })
+    }, 200);   
 
-    if(clipesFiltrados.length > 0){
-        montaVideosPaginaTodosV2({dados: clipesFiltrados});
-    }else{
-        montaVideosPaginaTodosV2(false);
-    }
 }
 
-/////////////////////////////////// FUNÇÕES - PAGINA ALEATORIO //////////
+//Mostra as opções do Select Personalizado
+function showOptions() {
+    let options = document.getElementById('FiltroOpcoes');
+    console.log("Opções A Mostra")
+    options.style.display = (options.style.display === 'none') ? 'block' : 'none';
+}
+
+//Seleciona a opção do Select Personalizado
+function selectOption(option) {
+    var selectStyled = document.querySelector('.select-styled');
+    selectStyled.textContent = option.textContent;
+    var options = document.getElementById('FiltroOpcoes');
+    options.style.display = 'none';
+
+    pesquisaClipes(document.getElementById('CampoPesquisa'))
+}
+
+//Abre o popup do clipe
+function abrirPopUp(card){
+    document.body.insertAdjacentHTML('beforeBegin',`
+        <div id="PopUpClipe">
+            <div id="ConteudoPopUp">
+                <div id="tituloPopup">
+                    <p>${card.getAttribute('data-clipeNome')}</p>
+                    <button id="BotaoFecharPopUp" onclick="fecharPopUp()">X</button>
+                </div>
+                <div style="position: relative; margin-top: 20px;">
+                    <div id="loadingClipePopUp" class="loaderDiv" style="position: absolute;"><span class="loader"></span></div>
+                    <iframe onload="tornarVisivel(this); removeLoading('loadingClipePopUp')" src="https://drive.google.com/file/d/${card.getAttribute('data-clipeId')}/preview" allowfullscreen type='video/mp4' allow="autoplay"></iframe>
+                </div>
+            </div>
+        </div>
+    `)
+    document.body.style.overflow = "hidden"
+}
+
+//Fecha o popup do clipe aberto
+function fecharPopUp(){
+    document.getElementById('PopUpClipe').remove()
+    document.body.style.overflow = "auto"
+}
+
+/////////////////////////////////// FUNÇÕES [FIM] - PAGINA PESQUISA //////////
 
 
-function carregaPaginaAleatorio(){
+/////////////////////////////////// FUNÇÕES [INICIO] - PAGINA ALEATORIO //////////
+
+//Chama todas as funções iniciais da Página
+function iniciaPaginaAleatorio(){
     buscaClipeAleatorio();
 }
 
+//Busca pelo clipe aleatório e adiciona ele na tela
 function buscaClipeAleatorio(){
     let jsonDados = JSON.parse(localStorage.getItem("MeusClipes-All"));
     let clipeAleatorio = jsonDados.dados[Math.floor(Math.random()*jsonDados.dados.length)]
@@ -196,13 +230,14 @@ function buscaClipeAleatorio(){
             <p>${JSON.parse(clipeAleatorio.desc).data}</p>
         </div>
         <div id="ClipeAleatorioLoading" class="loaderDiv" style="position: absolute;"><span class="loader"></span></div>
-        <iframe autoplay=1 onload="loadIframes(this); removeLoading('ClipeAleatorioLoading'); this.click()" id="ClipeAleatorio" src="https://drive.google.com/file/d/${clipeAleatorio.id}/preview" allow="autoplay" frameborder="0" allowfullscreen="" sandbox="allow-forms allow-same-origin allow-scripts"></iframe>
+        <iframe autoplay=1 onload="tornarVisivel(this); removeLoading('ClipeAleatorioLoading'); this.click()" id="ClipeAleatorio" src="https://drive.google.com/file/d/${clipeAleatorio.id}/preview" allow="autoplay" frameborder="0" allowfullscreen="" sandbox="allow-forms allow-same-origin allow-scripts"></iframe>
     `)
 }
 
+/////////////////////////////////// FUNÇÕES [FIM] - PAGINA ALEATORIO //////////
 
 
-/////////////////////////////////// FUNÇÕES - GLOBAIS //////////
+/////////////////////////////////// FUNÇÕES [INICIO] - GLOBAIS //////////
 
 //Adiciona o loading de acordo com os parâmetros enviados
     //type = Tipo do loading (box|loader)
@@ -225,7 +260,9 @@ function adicionaLoading(type, elementID, loadingID){
     }
 }
 
-function loadIframes(elemento){
+
+//Adiciona opacidade no elemento
+function tornarVisivel(elemento){
     elemento.style.opacity = 1;
 }
 
@@ -290,3 +327,5 @@ function atualizaConteudo(){
     //localStorage.setItem('MeusClipes-All',JSON.stringify(json))
     window.location.reload();
 }
+
+/////////////////////////////////// FUNÇÕES [FIM] - GLOBAIS //////////
