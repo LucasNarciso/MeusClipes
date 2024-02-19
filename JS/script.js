@@ -172,9 +172,9 @@ async function pesquisaClipes(campo){
 //Mostra as opções do Select Personalizado
 function showOptions() {
     let options = document.getElementById('FiltroOpcoes');
-    console.log("Opções A Mostra")
+
     options.style.display = (options.style.display === 'none') ? 'block' : 'none';
-    document.getElementById('select-styled').style.borderRadius = (document.getElementById('select-styled').style.borderRadius === '3px 3px 3px 3px') ? '0px 0px 3px 3px' : '3px 3px 0px 0px';
+    document.getElementById('select-styled').style.borderRadius = (document.getElementById('select-styled').style.borderRadius === '3px') ? '3px 3px 0px 0px' : '3px';
 }
 
 //Seleciona a opção do Select Personalizado
