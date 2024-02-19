@@ -137,7 +137,7 @@ function montaVideosPaginaPesquisa(obj){
     removeLoading('loadingClipes');
 
     document.getElementById('FiltroOpcoes').innerHTML = jogos.map(jogo=>`<li onclick="selectOption(this)">${jogo}</li>`).join('')
-    document.getElementById('FiltroOpcoes').insertAdjacentHTML('afterBegin','<li onclick="selectOption(this)">Filtro</li>')
+    document.getElementById('FiltroOpcoes').insertAdjacentHTML('afterBegin','<li onclick="selectOption(this)">Todos</li>')
 }
 
 //Pesquisa pelos clipes usando os parâmetros do campo
@@ -145,7 +145,7 @@ async function pesquisaClipes(campo){
     let clipes = document.querySelectorAll('.card');
     let filtro = document.querySelector("#divPesquisa > div > div").innerText;
 
-    if(filtro == 'Filtro'){
+    if(filtro == 'Todos'){
         filtro = "";
     }
 
@@ -172,11 +172,12 @@ function showOptions() {
     let options = document.getElementById('FiltroOpcoes');
     console.log("Opções A Mostra")
     options.style.display = (options.style.display === 'none') ? 'block' : 'none';
+    document.getElementById('select-styled').style.borderRadius = (document.getElementById('select-styled').style.borderRadius === '3px 3px 3px 3px') ? '0px 0px 3px 3px' : '3px 3px 0px 0px';
 }
 
 //Seleciona a opção do Select Personalizado
 function selectOption(option) {
-    var selectStyled = document.querySelector('.select-styled');
+    var selectStyled = document.querySelector('#select-styled');
     selectStyled.textContent = option.textContent;
     var options = document.getElementById('FiltroOpcoes');
     options.style.display = 'none';

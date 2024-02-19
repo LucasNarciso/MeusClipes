@@ -97,6 +97,7 @@ body{
     justify-content: center;
     gap: 1vw;
     width: 100%;
+    transition: 1s ease-in-out;
 }
 
 #conteudoPaginaTodos {
@@ -122,6 +123,7 @@ body{
     background-color: #0F7173;
     position: relative;
     transition: 0.1s ease-in-out;
+    border-radius: 3px;
 }
 .card:hover{
     transform: scale(1.03);
@@ -153,7 +155,7 @@ body{
     border: none;
     border-radius: 3px;
     height: 30px;
-    width: 90%;
+    width: 500px;
     padding: 0px 5px;
     outline: none;
 }
@@ -173,6 +175,7 @@ body{
 .custom-select {
     position: relative;
     display: inline-block;
+    user-select: none;
 }
 
 /* Estilo para ocultar a caixa de seleção padrão */
@@ -181,21 +184,20 @@ body{
 }
 
 /* Estilo para o contêiner da caixa de seleção personalizada */
-.select-styled {
+#select-styled {
     display: flex;
     align-items: center;
-    justify-content: center;
     height: 30px;
+    width: 130px;
     padding: 0px 30px 0px 10px;
     color: #272932;
     background-color: #D9D9D9;
-    border-radius: 3px;
     border: none;
     cursor: pointer;
 }
 
 /* Estilo para a seta da caixa de seleção personalizada */
-.select-styled:after {
+#select-styled:after {
     content: "\25BC"; /* Símbolo da seta para baixo (Unicode) */
     position: absolute;
     top: 50%;
@@ -209,19 +211,21 @@ body{
     position: absolute;
     color: #272932;
     background-color: #D9D9D9;
-    border-radius: 3px;
+    border-radius: 0px 0px 3px 3px;
     border: none;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     z-index: 1;
     list-style: none;
     padding: 0;
     margin: 0;
+    width: 100%;
     overflow: hidden;
 }
 
 /* Estilo para as opções da lista */
 .select-options li {
     padding: 10px;
+    width: 100%;
     cursor: pointer;
 }
 
