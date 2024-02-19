@@ -54,6 +54,9 @@ body{
 .botaoAtivado{
     text-decoration: none;
 }
+#LogoTitulo:hover{
+    cursor: pointer;
+}
 
 
 /* LOADING */
