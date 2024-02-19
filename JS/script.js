@@ -63,6 +63,7 @@ function iniciaPaginaEscolhidos(){
     }else{
         escolheClipes()
     }
+    document.getElementById('LogoTitulo').addEventListener('click',()=>{window.location.href="https://lucasnarciso.github.io/MeusClipes"})
 }
 
 //Escolhe os clipes da página
@@ -106,6 +107,7 @@ async function iniciaPaginaPesquisa(){
 
     let jsonData = JSON.parse(localStorage.getItem("MeusClipes-All"));
     montaVideosPaginaPesquisa(jsonData);
+    document.getElementById('LogoTitulo').addEventListener('click',()=>{window.location.href="https://lucasnarciso.github.io/MeusClipes"})
 }
 
 //Adiciona todos os clipes na pagina
@@ -218,6 +220,7 @@ function fecharPopUp(){
 //Chama todas as funções iniciais da Página
 function iniciaPaginaAleatorio(){
     buscaClipeAleatorio();
+    document.getElementById('LogoTitulo').addEventListener('click',()=>{window.location.href="https://lucasnarciso.github.io/MeusClipes"})
 }
 
 //Busca pelo clipe aleatório e adiciona ele na tela
