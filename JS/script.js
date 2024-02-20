@@ -77,7 +77,7 @@ function escolheClipes(){
         document.getElementById('MVPClipe').innerHTML = JSON.parse(clipeDoDia.desc).mvp;
 
         document.getElementById('dadosClipe').insertAdjacentHTML('beforeEnd',`
-            <div style="padding-left: 10px"> Jogo: <a href="MeusClipes/Pesquisa?filtroJogo=${clipeDoDia.folder}">${clipeDoDia.folder} </a></div></br>
+            <div style="padding-left: 10px"> Jogo: <a href="pesquisa?filtroJogo=${clipeDoDia.folder}">${clipeDoDia.folder} </a></div></br>
             <div style="padding-left: 10px"> Data: ${JSON.parse(clipeDoDia.desc).data} </div></br>
             <div style="padding-left: 10px; display:flex; gap: 5px; flex-wrap: wrap;"> Tags: ${JSON.parse(clipeDoDia.desc).tags.map( tag=>{ return `<span class="tagsClipe">${tag}</span>` } ).join(' ')} </div>
         `)
