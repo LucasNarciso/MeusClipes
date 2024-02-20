@@ -72,14 +72,14 @@ function escolheClipes(){
     let clipeDoDia = json.dados.filter(clipe => JSON.parse(clipe.desc).data.split(' ')[0] == (new Date().toLocaleDateString('pt-br', { year:"numeric", month:"numeric", day:"numeric"})) )[0];
 
     if(clipeDoDia){
-        document.getElementById('ClipeDoDia').insertAdjacentHTML('beforeEnd',`<iframe onload="tornarVisivel(this); removeLoading('loadingClipeDoDia')" src="https://drive.google.com/file/d/${clipeDoDia.id}/preview" frameborder="0" allowFullScreen allow="autoplay"></iframe>`)
+        document.getElementById('DivClipeDoDia').insertAdjacentHTML('beforeEnd',`<div id="ClipeDoDia"><iframe onload="tornarVisivel(this); removeLoading('loadingClipeDoDia')" src="https://drive.google.com/file/d/${clipeDoDia.id}/preview" frameborder="0" allowFullScreen allow="autoplay"></iframe></div>`)
         document.getElementById('nomeDoClipe').innerHTML = clipeDoDia.name
         document.getElementById('MVPClipe').innerHTML = JSON.parse(clipeDoDia.desc).mvp;
 
         document.getElementById('dadosClipe').insertAdjacentHTML('beforeEnd',`
-            <p style="padding-left: 10px"> Jogo: ${clipeDoDia.folder} </p></br>
-            <p style="padding-left: 10px"> Data: ${JSON.parse(clipeDoDia.desc).data} </p></br>
-            <p style="padding-left: 10px"> Tags: ${JSON.parse(clipeDoDia.desc).tags.map( tag=>{ return `<span class="tagsClipe">${tag}</span>` } ).join(' ')} </p>
+            <div style="padding-left: 10px"> Jogo: <a href="/pesquisa?filtroJogo=${clipeDoDia.folder}">${clipeDoDia.folder} </a></div></br>
+            <div style="padding-left: 10px"> Data: ${JSON.parse(clipeDoDia.desc).data} </div></br>
+            <div style="padding-left: 10px; display:flex; gap: 5px; flex-wrap: wrap;"> Tags: ${JSON.parse(clipeDoDia.desc).tags.map( tag=>{ return `<span class="tagsClipe">${tag}</span>` } ).join(' ')} </div>
         `)
     }else{
         document.getElementById('nomeDoClipe').innerHTML = "...";
@@ -88,7 +88,7 @@ function escolheClipes(){
 
         setTimeout(() => {
             removeLoading('loadingClipeDoDia');
-            document.getElementById('ClipeDoDia').insertAdjacentHTML('beforeEnd', `<svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M58 54.4924L54.4924 58L46.9524 50.46H7.9819C6.5169 50.46 5.1119 49.878 4.07598 48.8421C3.04007 47.8062 2.4581 46.4012 2.4581 44.9362V11.7933C2.4581 10.1914 3.14857 8.75524 4.25333 7.76095L0 3.50762L3.53524 0L58 54.4924ZM57.3648 46.8143C57.5857 46.2343 57.6962 45.599 57.6962 44.9362V6.26952H46.6486L52.1724 17.3171H43.8867L38.3629 6.26952H32.839L38.3629 17.3171H30.0771L24.5533 6.26952H19.0295L21.239 10.6886L57.3648 46.8143Z" fill="#0F7173"/></svg> <br> <p>Nenhum clipe foi gravado nesse dia '-'</p>`)
+            document.getElementById('DivClipeDoDia').insertAdjacentHTML('beforeEnd', `<div style="display:flex; flex-direction: column; align-items: center;"><svg width="58" height="58" viewBox="0 0 58 58" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M58 54.4924L54.4924 58L46.9524 50.46H7.9819C6.5169 50.46 5.1119 49.878 4.07598 48.8421C3.04007 47.8062 2.4581 46.4012 2.4581 44.9362V11.7933C2.4581 10.1914 3.14857 8.75524 4.25333 7.76095L0 3.50762L3.53524 0L58 54.4924ZM57.3648 46.8143C57.5857 46.2343 57.6962 45.599 57.6962 44.9362V6.26952H46.6486L52.1724 17.3171H43.8867L38.3629 6.26952H32.839L38.3629 17.3171H30.0771L24.5533 6.26952H19.0295L21.239 10.6886L57.3648 46.8143Z" fill="#D9D9D9"/></svg> <br> <p>Nenhum clipe foi gravado nesse dia '-'</p></div>`)
         }, 500);
 
     }
@@ -108,6 +108,19 @@ async function iniciaPaginaPesquisa(){
     let jsonData = JSON.parse(localStorage.getItem("MeusClipes-All"));
     montaVideosPaginaPesquisa(jsonData);
     document.getElementById('LogoTitulo').addEventListener('click',()=>{window.location.href="https://lucasnarciso.github.io/MeusClipes"})
+
+    pesquisaComParametro();
+}
+
+function pesquisaComParametro(){
+    let urlParams = new URLSearchParams(window.location.search);
+    let filtroJogo = urlParams.get('filtroJogo')
+    
+    let jogosAtuais = Array.from(document.getElementById('FiltroOpcoes').querySelectorAll('li')).map(li=>li.innerText)
+    if(jogosAtuais.includes(filtroJogo)){
+        document.getElementById('select-styled').innerHTML = filtroJogo;
+        pesquisaClipes(document.getElementById('CampoPesquisa'))
+    }
 }
 
 //Adiciona todos os clipes na pagina
@@ -234,7 +247,9 @@ function buscaClipeAleatorio(){
             <p>${JSON.parse(clipeAleatorio.desc).data}</p>
         </div>
         <div id="ClipeAleatorioLoading" class="loaderDiv" style="position: absolute;"><span class="loader"></span></div>
-        <iframe autoplay=1 onload="tornarVisivel(this); removeLoading('ClipeAleatorioLoading'); this.click()" id="ClipeAleatorio" src="https://drive.google.com/file/d/${clipeAleatorio.id}/preview" allow="autoplay" frameborder="0" allowfullscreen="" sandbox="allow-forms allow-same-origin allow-scripts"></iframe>
+        <div id="DivPlayer">
+            <iframe autoplay=1 onload="tornarVisivel(this); removeLoading('ClipeAleatorioLoading'); this.click()" id="ClipeAleatorio" src="https://drive.google.com/file/d/${clipeAleatorio.id}/preview" allow="autoplay" frameborder="0" allowfullscreen="" sandbox="allow-forms allow-same-origin allow-scripts"></iframe>
+        </div>
     `)
 }
 
