@@ -10,6 +10,28 @@
 body{
     background-color: #E7ECEF;
     height: 100vh;
+    
+    overflow: hidden;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #E7ECEF;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #0F7173;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
 
 
@@ -20,7 +42,6 @@ body{
     width: 100vw;
     justify-content: space-between;
     align-items: center;
-    position: fixed;
     background: #272932;
     z-index: 2;
     flex-wrap: wrap;
@@ -28,7 +49,7 @@ body{
 @media (max-width: 600px) {
     .navBar{
         justify-content: center;
-        padding: 5px;
+        padding: 5px 0px;
     }
 }
 
@@ -98,6 +119,28 @@ body{
     }
 }
 
+.divContainer{
+    overflow: auto;
+    max-width: 1920px;
+    min-width: 300px;
+    width: 100vw;
+    height: 100vh;
+    background-color: #E7ECEF;
+}
+
+.conteudoPagina{
+    display: flex;
+    padding: 0px 15px 200px 15px;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    align-content: flex-start;
+    justify-content: start;
+    background-color: #E7ECEF;
+    width: auto;
+    gap: 1vw;
+    height: auto;
+}
 
 /*********** ESTILIZAÇÃO - PAGINA PESQUISA ***********/
 
@@ -111,20 +154,6 @@ body{
     justify-content: center;
     gap: 1vw;
     width: 100%;
-    transition: 1s ease-in-out;
-}
-
-#conteudoPaginaTodos {
-    display: flex;
-    padding: 78px 10px 30px 10px;
-    height: auto;
-    flex-direction: column;
-    align-content: flex-start;
-    align-items: flex-start;
-    justify-content: center;
-    gap: 1vw;
-    max-width: 1920px;
-    margin: auto;
 }
 
 .card{
@@ -158,6 +187,7 @@ body{
 #divPesquisa{
     width: 100%;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 80px;
@@ -182,27 +212,23 @@ body{
     background-color: #0F7173;
 }
 
-
-
-
 /* Estilos para o contêiner personalizado */
-.custom-select {
+.select-styled-case {
     position: relative;
     display: inline-block;
     user-select: none;
 }
 
 /* Estilo para ocultar a caixa de seleção padrão */
-.custom-select select {
+.select-styled-case input {
     display: none;
 }
 
 /* Estilo para o contêiner da caixa de seleção personalizada */
-#select-styled {
+.select-styled {
     display: flex;
     align-items: center;
     height: 30px;
-    width: 130px;
     padding: 0px 30px 0px 10px;
     color: #272932;
     background-color: #D9D9D9;
@@ -211,11 +237,20 @@ body{
 }
 
 /* Estilo para a seta da caixa de seleção personalizada */
-#select-styled:after {
+.select-styled-open:after {
+    content: "\25B2"; /* Símbolo da seta para baixo (Unicode) */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+.select-styled-close:after{
     content: "\25BC"; /* Símbolo da seta para baixo (Unicode) */
     position: absolute;
     top: 50%;
     right: 10px;
+    cursor: pointer;
     transform: translateY(-50%);
 }
 
@@ -301,25 +336,6 @@ body{
 
 /*********** ESTILIZAÇÃO - PAGINA ESCOLHIDOS ***********/
 
-#conteudoPaginaEscolhidos {
-    display: flex;
-    padding: 78px 10px 0px 10px;
-    height: auto;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-content: flex-start;
-    align-items: flex-start;
-    justify-content: start;
-    gap: 1vw;
-    align-self: stretch;
-    background-color: #E7ECEF;
-    max-width: 2000px;
-    margin: auto;
-
-    max-width: 1920px;
-    min-width: 300px;
-}
-
 .tituloPrincipalPagina{
     color: #0F7173;
     /* font-size: 32px; */
@@ -337,8 +353,8 @@ body{
     justify-content: center;
     gap: 100px;
     width: 100%;
-    height: 324px;
-    padding: 30px 30px;
+    height: auto;
+    padding: 30px 0px;
     flex-wrap: wrap;
 }
 @media (max-width: 600px) {
@@ -350,12 +366,19 @@ body{
 .divSeparacao{
     display: flex;
     flex-direction: column;
-    max-width: 576px;
+    max-width: 550px;
     min-width: 300px;
     width: 100%;
-    height: auto;
+    height: 310px;
     gap: 10px;
 }
+@media (max-width: 600px) {
+    .divSeparacao{
+        width: 100%;
+        min-width: 250px;
+    }
+}
+
 .divSeparacaoTitulo{
     color: #E7ECEF;
     display: flex;
@@ -487,18 +510,6 @@ body{
 
 /*********** ESTILIZAÇÃO - PAGINA ALEATÓRIO ***********/
 
-#conteudoPaginaAleatorio {
-    display: flex;
-    padding: 78px 10px 0px 10px;
-    flex-direction: column;
-    align-items: center;
-    justify-content: start;
-    background-color: #E7ECEF;
-    max-width: 2000px;
-    margin: auto;
-    gap: 20px;
-    height: auto;
-}
 
 #DivClipeAleatorio{
     background-color: #0F7173;

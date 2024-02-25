@@ -13,7 +13,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inria+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet">
 </head>
-<body onload="iniciaPaginaPesquisa()">
+<body onload="iniciarPaginaPesquisa()">
     <div class="navBar">
         <div style="display: flex; align-items: center; gap: 10px; margin: 0px 20px;" id="LogoTitulo">
             <svg xmlns="http://www.w3.org/2000/svg" width="33" height="34" viewBox="0 0 33 34" fill="none">
@@ -27,20 +27,31 @@
             <a class="botaoDesativado">Pesquisa</a>
         </div>
     </div>
-    <div>asdas</div>
-    <div id="conteudoPaginaTodos">
-        <div id="divPesquisa">
-            <input id="CampoPesquisa" type="text" onkeyup="pesquisaClipes(this)">
-            <!-- <input id="BotaoPesquisa" type="submit" value="Pesquisar"> -->
-
-            <div class="custom-select">
-                <div id="select-styled" onclick="showOptions()" style="border-radius: 3px 3px 3px 3px;">Todos</div>
-                <ul class="select-options" id="FiltroOpcoes" style="display: none;"></ul>
+    <div class="divContainer">
+        <div class="conteudoPagina">
+            <div id="divPesquisa">
+                <div>
+                    <div id="FiltroPesquisa" class="select-styled-case select-styled-close">
+                        <input name="FiltroPesquisa" id="FiltroNomeSelect" value="data-clipenome"></input>
+                        <div class="select-styled" onclick="mostrarOpcoes(this.parentElement.id)" style="width:50px; border-radius: 3px 3px 3px 3px;">Nome</div>
+                        <ul class="select-options" style="display: none;"></ul>
+                    </div>
+                    <input id="CampoPesquisa" type="text" onkeyup="pesquisarClipes(this)">
+                </div>
+                <div style="display:flex; justify-content: space-between;">
+                    <div id="FiltroJogo"class="select-styled-case select-styled-close">
+                        <input name="FiltroJogo" id="FiltroNomeSelect" value=""></input>
+                        <div class="select-styled" onclick="mostrarOpcoes(this.parentElement.id)" style="width:100px; border-radius: 3px 3px 3px 3px;">Todos</div>
+                        <ul class="select-options" style="display: none;"></ul>
+                    </div>
+                    <br>
+                </div>
             </div>
-
-        </div>
-        <div id="resultadoPesquisa">
-            <p style="display: none;" id="textoSemVideo"> Nenhum vídeo foi encontrado. </p>
+            <div id="resultadoPesquisa">
+                <p style="display: none;" id="textoSemVideo"> Nenhum vídeo foi encontrado. </p>
+            </div>
+            <br>
+            <br>
         </div>
     </div>
 </body>
