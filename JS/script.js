@@ -111,6 +111,7 @@ async function iniciarPaginaPesquisa(){
     document.getElementById('LogoTitulo').addEventListener('click',()=>{window.location.href="https://lucasnarciso.github.io/MeusClipes"})
 
     pesquisarComParametro();
+    contagemClipes();
 }
 
 function pesquisarComParametro(){
@@ -138,8 +139,9 @@ function montarVideosPaginaPesquisa(obj){
         {"nome":"Mais Novo", "valor":"novo"},
         {"nome":"Mais Antigo", "valor":"velho"},
     ]
+    let dadosClipes = obj.dados;
 
-    obj.dados.forEach((clipe, index) => {
+    dadosClipes.forEach((clipe, index) => {
         divVideos.insertAdjacentHTML('beforeEnd',`
             <div class="card" id="cardClipe${index}" onclick="abrirPopUp(this)" data-clipeData="${JSON.parse(clipe.desc).data}" data-clipeNome="${clipe.name.replace('.mp4','')}" data-clipeJogo="${clipe.folder}" data-clipeId="${clipe.id}" data-clipeMVP="${JSON.parse(clipe.desc).mvp}" data-clipeTags="${JSON.parse(clipe.desc).tags}">
                 <div class="nomeClipeCard"><p>${clipe.name.replace('.mp4','')}</p></div>
@@ -162,9 +164,9 @@ function montarVideosPaginaPesquisa(obj){
 
     removerLoading('loadingClipes');
 
-    montarSelect('FiltroJogo', optsJogos, {"nome":"Todos","valor":""});
-    montarSelect('FiltroPesquisa', optsPesquisa, {"nome":"Nome", "valor":"data-clipenome"});
-    montarSelect('FiltroOrdem', optsOrdem, {"nome":"A - Z", "valor":"a-z"});
+    montarSelect('FiltroJogo', optsJogos, {"nome":"Todos","valor":""}, "pesquisa");
+    montarSelect('FiltroPesquisa', optsPesquisa, {"nome":"Nome", "valor":"data-clipenome"}, "pesquisa");
+    montarSelect('FiltroOrdem', optsOrdem, {"nome":"A - Z", "valor":"a-z"}, "ordem");
 }
 
 //Pesquisa pelos clipes usando os parâmetros do campo
@@ -188,6 +190,7 @@ async function pesquisarClipes(campo){
         }else{
             document.getElementById('textoSemVideo').style.display = "none";
         }
+        contagemClipes();
     }, 200);   
 
 }
@@ -209,7 +212,7 @@ function mostrarOpcoes(selectID) {
 }
 
 //Seleciona a opção do Select Personalizado
-function selecionarOpcao(option) {
+function selecionarOpcao(option, tipo) {
     var select = option.parentElement.parentElement.querySelector('[class="select-styled"]');
     var options = select.parentElement.querySelector('[class="select-options"]');
     
@@ -227,13 +230,15 @@ function selecionarOpcao(option) {
     select.parentElement.querySelector('input').value = option.getAttribute('data-value')
 
     //Executa pesquisa dos clipes após selecionar opção do select
+
     pesquisarClipes(document.getElementById('CampoPesquisa'))
+    filtraClipesOrdem()
 }
 
 //Monta as opções do Select Personalizado
-function montarSelect(selectID, opcoes, padrao){
-    document.getElementById(selectID).querySelector('[class="select-options"]').innerHTML = opcoes.map(opcao=>`<li onclick="selecionarOpcao(this)" data-value="${opcao.valor}">${opcao.nome}</li>`).join('')
-    document.getElementById(selectID).querySelector('[class="select-options"]').insertAdjacentHTML('afterBegin',`<li onclick="selecionarOpcao(this)" data-value="${padrao.valor}">${padrao.nome}</li>`)
+function montarSelect(selectID, opcoes, padrao, tipo){
+    document.getElementById(selectID).querySelector('[class="select-options"]').innerHTML = opcoes.map(opcao=>`<li onclick="selecionarOpcao(this, '${tipo}')" data-value="${opcao.valor}">${opcao.nome}</li>`).join('')
+    document.getElementById(selectID).querySelector('[class="select-options"]').insertAdjacentHTML('afterBegin',`<li onclick="selecionarOpcao(this, '${tipo}')" data-value="${padrao.valor}">${padrao.nome}</li>`)
 }
 
 //Abre o popup do clipe
@@ -263,6 +268,86 @@ function fecharPopUp(){
 
 function filtraClipesOrdem(){
 
+    //let dadosClipes = JSON.parse(localStorage.getItem("MeusClipes-All"))
+    let dadosClipes = Array.from(Array.from(document.querySelectorAll('.card')).filter(card=>card.checkVisibility()))
+    let filtroOrdem = document.getElementById('FiltroOrdem').querySelector('input').value;
+    let divVideos = document.getElementById('resultadoPesquisa')
+
+    if(filtroOrdem == "a-z"){
+
+        dadosClipes = dadosClipes.sort((a, b) => {
+            const nameA = a.getAttribute("data-clipeNome").toUpperCase();
+            const nameB = b.getAttribute("data-clipeNome").toUpperCase();
+        
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
+        })
+
+    }else if(filtroOrdem == "z-a"){
+        dadosClipes = dadosClipes.sort((a, b) => {
+            const nameA = a.getAttribute("data-clipeNome").toUpperCase();
+            const nameB = b.getAttribute("data-clipeNome").toUpperCase();
+        
+            if (nameA > nameB) {
+                return -1;
+            }
+            if (nameA < nameB) {
+                return 1;
+            }
+            return 0;
+        })
+    }else if(filtroOrdem == "novo"){
+        dadosClipes = dadosClipes.sort((a, b) => {
+            const nameA = a.getAttribute("data-clipeData")
+            const nameB = b.getAttribute("data-clipeData")
+        
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
+        })
+    }if(filtroOrdem == "velho"){
+        dadosClipes = dadosClipes.sort((a, b) => {
+            const nameA = a.getAttribute("data-clipeData")
+            const nameB = b.getAttribute("data-clipeData")
+        
+            if (nameA > nameB) {
+                return -1;
+            }
+            if (nameA < nameB) {
+                return 1;
+            }
+            return 0;
+        })
+    }
+    Array.from(divVideos.querySelectorAll('.card')).map(card=>card.style.display = "none")
+    dadosClipes.forEach((clipe, index) => {
+        divVideos.insertAdjacentElement('beforeEnd',clipe)
+        //console.log(clipe)
+        // var minhaImagem = document.getElementById(`cardClipe${index}`).querySelector('img');
+
+        // minhaImagem.onload = function() {
+        //     tornarVisivel(minhaImagem)
+        //     removerLoading(`loadingClipe${index}`)
+        // };
+    });
+}
+
+function contagemClipes(tipo){
+    let contadorVisual = document.getElementById('ContagemClips')
+    let qtdClipesTotal = Array.from(document.querySelectorAll('.card'))
+    let qtdClipesAtual = qtdClipesTotal.filter(card=>card.checkVisibility())
+
+    contadorVisual.querySelector('#ContagemAtual').innerHTML = qtdClipesAtual.length
+    contadorVisual.querySelector('#ContagemTotal').innerHTML = qtdClipesTotal.length
 }
 
 /////////////////////////////////// [FIM] - PAGINA PESQUISA //////////
