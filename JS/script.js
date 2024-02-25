@@ -136,8 +136,8 @@ function montarVideosPaginaPesquisa(obj){
     ]
     let optsOrdem = [
         {"nome":"Z - A", "valor":"z-a"},
-        {"nome":"Mais Novo", "valor":"novo"},
-        {"nome":"Mais Antigo", "valor":"velho"},
+        {"nome":"Novo", "valor":"novo"},
+        {"nome":"Antigo", "valor":"velho"},
     ]
     let dadosClipes = obj.dados;
 

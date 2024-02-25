@@ -14,6 +14,10 @@ body{
     overflow: hidden;
 }
 
+iframe{
+    border: none;
+}
+
 /* width */
 ::-webkit-scrollbar {
     width: 10px;
@@ -120,7 +124,7 @@ body{
 }
 
 .divContainer{
-    overflow: auto;
+    overflow-y: scroll;
     max-width: 1920px;
     min-width: 300px;
     width: 100vw;
@@ -588,31 +592,6 @@ body{
 #BotaoAleatorio:hover{
     cursor: pointer;
     transform: scale(1.1);
-}
-
-#BotaoAleatorio:hover svg{
-    
-    transition: n;
-    animation: dadoRoll 0.7s infinite;
-}
-
-@keyframes dadoRoll {
-    0%{
-        transform: rotateY(180deg);
-    }
-    25%{
-        transform: rotateY(180deg);
-        transform: rotateX(180deg);
-    }
-    50%{
-        transform: rotateY(180deg);
-        transform: rotateX(180deg);
-        transform: rotateZ(180deg);
-    }
-    75%{
-        transform: rotateX(180deg);
-        transform: rotateY(180deg);
-    }
 }
 
 #InfoClipeAleatorio{
