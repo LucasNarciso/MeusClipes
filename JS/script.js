@@ -128,12 +128,12 @@ function pesquisarComParametro(){
 //Adiciona todos os clipes na pagina
 function montarVideosPaginaPesquisa(obj){
     let divVideos = document.getElementById('resultadoPesquisa')
-    let jogos = Array.from(new Set(obj.dados.map(clipe => clipe.folder))).map(jogo=>{return {"valor":jogo, "nome":jogo} } )
+    let optsJogos = Array.from(new Set(obj.dados.map(clipe => clipe.folder))).map(jogo=>{return {"valor":jogo, "nome":jogo} } )
     let optsPesquisa = [
         {"nome":"MVP", "valor":"data-clipeMVP"}, 
         {"nome":"Tags", "valor":"data-clipeTags"}
     ]
-    let optsordem = [
+    let optsOrdem = [
         {"nome":"Z - A", "valor":"z-a"},
         {"nome":"Mais Novo", "valor":"novo"},
         {"nome":"Mais Antigo", "valor":"velho"},
@@ -162,9 +162,9 @@ function montarVideosPaginaPesquisa(obj){
 
     removerLoading('loadingClipes');
 
-    montarSelect('FiltroJogo', jogos, {"nome":"Todos","valor":""});
+    montarSelect('FiltroJogo', optsJogos, {"nome":"Todos","valor":""});
     montarSelect('FiltroPesquisa', optsPesquisa, {"nome":"Nome", "valor":"data-clipenome"});
-    montarSelect('FiltroOrdem', optsordem, {"nome":"A - Z", "valor":"a-z"});
+    montarSelect('FiltroOrdem', optsOrdem, {"nome":"A - Z", "valor":"a-z"});
 }
 
 //Pesquisa pelos clipes usando os parâmetros do campo
@@ -172,10 +172,6 @@ async function pesquisarClipes(campo){
     let clipes = document.querySelectorAll('.card');
     let filtroJogo = document.getElementById('FiltroJogo').querySelector('input').value;
     let filtroPesquisa = document.getElementById('FiltroPesquisa').querySelector('input').value;
-
-    console.log("Executou Pesquisa: ")
-    console.log("Filtro Pesquisa: ", filtroPesquisa)
-    console.log("Filtro Jogo: ", filtroJogo)
 
     setTimeout(() => {
         clipes.forEach((clipe) => {
@@ -249,7 +245,7 @@ function abrirPopUp(card){
                     <p>${card.getAttribute('data-clipeNome')}</p>
                     <button id="BotaoFecharPopUp" onclick="fecharPopUp()">X</button>
                 </div>
-                <div style="position: relative; margin-top: 20px;">
+                <div style="position: relative; margin-top: 20px; padding-bottom: 56.25%;">
                     <div id="loadingClipePopUp" class="loaderDiv" style="position: absolute;"><span class="loader"></span></div>
                     <iframe onload="tornarVisivel(this); removerLoading('loadingClipePopUp')" src="https://drive.google.com/file/d/${card.getAttribute('data-clipeId')}/preview" allowfullscreen type='video/mp4' allow="autoplay"></iframe>
                 </div>
@@ -263,6 +259,10 @@ function abrirPopUp(card){
 function fecharPopUp(){
     document.getElementById('PopUpClipe').remove()
     document.body.style.overflow = "auto"
+}
+
+function filtraClipesOrdem(){
+
 }
 
 /////////////////////////////////// [FIM] - PAGINA PESQUISA //////////
