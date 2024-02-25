@@ -30,21 +30,26 @@
     <div class="divContainer">
         <div class="conteudoPagina">
             <div id="divPesquisa">
-                <div>
+                <div style="display: flex; gap: 10px; width: 100%; justify-content: center;">
                     <div id="FiltroPesquisa" class="select-styled-case select-styled-close">
-                        <input name="FiltroPesquisa" id="FiltroNomeSelect" value="data-clipenome"></input>
+                        <input name="FiltroPesquisa" value="data-clipenome"></input>
                         <div class="select-styled" onclick="mostrarOpcoes(this.parentElement.id)" style="width:50px; border-radius: 3px 3px 3px 3px;">Nome</div>
                         <ul class="select-options" style="display: none;"></ul>
                     </div>
                     <input id="CampoPesquisa" type="text" onkeyup="pesquisarClipes(this)">
                 </div>
-                <div style="display:flex; justify-content: space-between;">
+
+                <div style="display:flex; gap: 10px;">
                     <div id="FiltroJogo"class="select-styled-case select-styled-close">
-                        <input name="FiltroJogo" id="FiltroNomeSelect" value=""></input>
+                        <input name="FiltroJogo" value=""></input>
                         <div class="select-styled" onclick="mostrarOpcoes(this.parentElement.id)" style="width:100px; border-radius: 3px 3px 3px 3px;">Todos</div>
                         <ul class="select-options" style="display: none;"></ul>
                     </div>
-                    <br>
+                    <div id="FiltroOrdem"class="select-styled-case select-styled-close">
+                        <input name="FiltroOrdem" value=""></input>
+                        <div class="select-styled" onclick="mostrarOpcoes(this.parentElement.id)" style="width:100px; border-radius: 3px 3px 3px 3px;">A - Z</div>
+                        <ul class="select-options" style="display: none;"></ul>
+                    </div>
                 </div>
             </div>
             <div id="resultadoPesquisa">

@@ -133,6 +133,11 @@ function montarVideosPaginaPesquisa(obj){
         {"nome":"MVP", "valor":"data-clipeMVP"}, 
         {"nome":"Tags", "valor":"data-clipeTags"}
     ]
+    let optsordem = [
+        {"nome":"Z - A", "valor":"z-a"},
+        {"nome":"Mais Novo", "valor":"novo"},
+        {"nome":"Mais Antigo", "valor":"velho"},
+    ]
 
     obj.dados.forEach((clipe, index) => {
         divVideos.insertAdjacentHTML('beforeEnd',`
@@ -158,7 +163,8 @@ function montarVideosPaginaPesquisa(obj){
     removerLoading('loadingClipes');
 
     montarSelect('FiltroJogo', jogos, {"nome":"Todos","valor":""});
-    montarSelect('FiltroPesquisa', optsPesquisa, {"nome":"Nome", "valor":"data-clipeNome"});
+    montarSelect('FiltroPesquisa', optsPesquisa, {"nome":"Nome", "valor":"data-clipenome"});
+    montarSelect('FiltroOrdem', optsordem, {"nome":"A - Z", "valor":"a-z"});
 }
 
 //Pesquisa pelos clipes usando os parâmetros do campo
@@ -167,12 +173,14 @@ async function pesquisarClipes(campo){
     let filtroJogo = document.getElementById('FiltroJogo').querySelector('input').value;
     let filtroPesquisa = document.getElementById('FiltroPesquisa').querySelector('input').value;
 
-    console.log(filtroPesquisa)
+    console.log("Executou Pesquisa: ")
+    console.log("Filtro Pesquisa: ", filtroPesquisa)
+    console.log("Filtro Jogo: ", filtroJogo)
 
     setTimeout(() => {
         clipes.forEach((clipe) => {
 
-            if (clipe.getAttribute(filtroPesquisa).toUpperCase().search(campo.value.toUpperCase()) != -1 && clipe.getAttribute('data-clipejogo').search(filtroJogo) != -1) {
+            if ((clipe.getAttribute(filtroPesquisa) && clipe.getAttribute(filtroPesquisa).toUpperCase().search(campo.value.toUpperCase()) != -1) && clipe.getAttribute('data-clipejogo').search(filtroJogo) != -1) {
                 clipe.style.display = "flex";
             } else {
                 clipe.style.display = "none";
@@ -229,7 +237,7 @@ function selecionarOpcao(option) {
 //Monta as opções do Select Personalizado
 function montarSelect(selectID, opcoes, padrao){
     document.getElementById(selectID).querySelector('[class="select-options"]').innerHTML = opcoes.map(opcao=>`<li onclick="selecionarOpcao(this)" data-value="${opcao.valor}">${opcao.nome}</li>`).join('')
-    document.getElementById(selectID).querySelector('[class="select-options"]').insertAdjacentHTML('afterBegin',`<li onclick="selecionarOpcao(this)" data-value"${padrao.valor}">${padrao.nome}</li>`)
+    document.getElementById(selectID).querySelector('[class="select-options"]').insertAdjacentHTML('afterBegin',`<li onclick="selecionarOpcao(this)" data-value="${padrao.valor}">${padrao.nome}</li>`)
 }
 
 //Abre o popup do clipe
